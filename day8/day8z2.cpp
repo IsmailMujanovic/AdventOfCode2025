@@ -103,7 +103,6 @@ int main()
     int n = points.size();
     std::vector<Edge> edges;
 
-    // Calculate all pairwise distances
     for (int i = 0; i < n; i++)
     {
         for (int j = i + 1; j < n; j++)
@@ -112,10 +111,8 @@ int main()
         }
     }
 
-    // Sort edges by distance
     std::sort(edges.begin(), edges.end());
 
-    // Keep connecting until we have only 1 component
     UnionFind uf(n);
     int lastI = -1, lastJ = -1;
 
@@ -132,7 +129,6 @@ int main()
         }
     }
 
-    // Multiply X coordinates of the last two junction boxes connected
     long long result = (long long)points[lastI].x * points[lastJ].x;
     std::cout << "Last connection: (" << points[lastI].x << "," << points[lastI].y << "," << points[lastI].z << ") and ("
               << points[lastJ].x << "," << points[lastJ].y << "," << points[lastJ].z << ")" << std::endl;
