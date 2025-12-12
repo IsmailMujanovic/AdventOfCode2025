@@ -71,20 +71,16 @@ void place(vector<vector<bool>>& grid, const Shape& shape, int x, int y, bool va
 bool solve(vector<vector<bool>>& grid, const vector<vector<Shape>>& trans, 
            vector<int>& counts) {
     
-    // Check if all done
     bool allPlaced = true;
     for (int c : counts) if (c > 0) allPlaced = false;
     if (allPlaced) return true;
     
     int h = grid.size(), w = grid[0].size();
     
-    // Try each shape type
     for (int shapeIdx = 0; shapeIdx < counts.size(); shapeIdx++) {
         if (counts[shapeIdx] == 0) continue;
         
-        // Try each transformation
         for (const Shape& shape : trans[shapeIdx]) {
-            // Try all positions
             for (int y = 0; y < h; y++) {
                 for (int x = 0; x < w; x++) {
                     if (canPlace(grid, shape, x, y)) {
@@ -118,9 +114,8 @@ int main() {
     string line;
     vector<Shape> baseShapes;
     
-    // Parse exactly 6 shapes
     for (int i = 0; i < 6; i++) {
-        getline(infile, line); // shape header
+        getline(infile, line);
         
         Shape shape;
         for (int row = 0; row < 3; row++) {
@@ -132,10 +127,9 @@ int main() {
             }
         }
         baseShapes.push_back(shape);
-        getline(infile, line); // empty line
+        getline(infile, line);
     }
     
-    // Generate transformations
     vector<vector<Shape>> allTrans;
     for (const Shape& s : baseShapes) {
         allTrans.push_back(getTransformations(s));
@@ -143,7 +137,6 @@ int main() {
     
     int validRegions = 0;
     
-    // Process regions
     while (getline(infile, line)) {
         if (line.empty() || line.find('x') == string::npos) continue;
         
@@ -160,7 +153,6 @@ int main() {
             counts.push_back(count);
         }
         
-        // Quick check: total area
         int totalCells = 0;
         for (int i = 0; i < counts.size() && i < allTrans.size(); i++) {
             totalCells += counts[i] * allTrans[i][0].cells.size();
@@ -172,7 +164,6 @@ int main() {
             continue;
         }
         
-        // Solve
         vector<vector<bool>> grid(h, vector<bool>(w, false));
         if (solve(grid, allTrans, counts)) {
             validRegions++;
